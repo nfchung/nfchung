@@ -1,0 +1,83 @@
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script language="javascript">
+	if (navigator.geolocation){
+		navigator.geolocation.getCurrentPosition(success);
+	}
+
+//if ("geolocation" in navigator) {
+//} else {
+//}
+
+//        $(document).ready(function () {
+//            $(".mytbl").click(function () {
+//                markup = "<tr><td>" + formatAMPM() + "</td></tr>";
+//                tableBody = $("table tbody");
+//                tableBody.append(markup);
+//            });
+//        }); 
+
+var watchId = 0;
+
+function success(position) {
+	addInfo(position);//.coords.latitude, position.coords.longitude);
+}
+
+function error() {
+	alert("Sorry, no position available.");
+}
+
+const options = {
+	enableHighAccuracy: true,
+	maximumAge: 30000,
+	timeout: 27000,
+};
+
+function startTracking()
+{
+	watchID = navigator.geolocation.watchPosition(success, error, options);
+}
+
+function stopTracking()
+{
+	navigator.geolocation.clearWatch(watchID);
+	watchID = 0;
+}
+
+function addInfo(position)
+{
+	markup = "<tr><td>" + formatAMPM() + ": " + position.coords.latitude + ", " + position.coords.longitude + "</td></tr>";
+	tableBody = $("table tbody");
+	tableBody.append(markup);
+}
+
+function formatAMPM() {
+    var date = new Date();
+    var hours = date.getHours();
+    var days = date.getDay(); 
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    seconds = seconds < 10 ? '0'+seconds : seconds;
+    //var strTime = date + ' ' + hours + ':' + minutes + ' ' + ampm;
+    var strTime = hours + ':' + minutes + ':' + seconds;
+    return strTime;
+}
+
+</script>
+</head>
+<body>
+    <input type="button" value="Start" onclick="startTracking()" />
+    <input type="button" value="Stop"  onclick="stopTracking()" />
+    <table class="mytbl">
+        <thead>
+            <tr>
+                <th>Tracking</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+</html>
